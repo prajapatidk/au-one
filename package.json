@@ -7,7 +7,7 @@
     "start": "electron .",
     "dist": "electron-builder"
   },
-  "repository": "https://github.com/prajapatidk/electron-auto-update",
+  "repository": "https://github.com/prajapatidk/au-one",
   "publish": {
     "provider": "github",
     "releaseType": "release"
