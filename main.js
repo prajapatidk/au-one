@@ -6,15 +6,29 @@ const log = require("electron-log");
 const { autoUpdater } = require("electron-updater");
 const path = require("path");
 
+let mainWindow;
+
 log.transports.file.resolvePath = () =>
   path.join("E:/jsframework/electron/au-one/", "logs/main.log");
 
-// autoUpdater.autoDownload = false;
-// autoUpdater.autoInstallOnAppQuit = true;
+Object.defineProperty(app, "isPackaged", {
+  get() {
+    return true;
+  },
+});
+
+autoUpdater.setFeedURL({
+  provider: "github",
+  owner: "prajapatidk",
+  repo: "au-one",
+  private: true,
+});
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = true;
 
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
   });
@@ -32,7 +46,7 @@ const createWindow = () => {
 app.whenReady().then(() => {
   createWindow();
 
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdates();
 
   app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
@@ -42,34 +56,28 @@ app.whenReady().then(() => {
 });
 
 autoUpdater.on("checking-for-update", (info) => {
-  log.info("checking-for-update");
-  console.log("checking-for-update");
+  log.info("checking-for-update", info);
+  mainWindow.webContents.send("checkingStatus", "Checking for new updates");
 });
 
 autoUpdater.on("update-available", (info) => {
-  console.log("update-available");
-  log.info("update-available");
+  log.info("update-available", info);
 });
 
 autoUpdater.on("update-not-available", (info) => {
-  console.log("update-available");
-  log.info("update-available");
+  log.info("update-available", info);
 });
 
 autoUpdater.on("error", (info) => {
-  console.log("error");
-  log.info("error");
+  log.info("error", info);
 });
 
 autoUpdater.on("download-process", (progressTrack) => {
-  console.log("\n\ndownload-process");
-  console.log(progressTrack);
   log.info(progressTrack);
 });
 
 autoUpdater.on("update-downloaded", (info) => {
-  console.log("update-downloaded");
-  log.info("update-downloaded");
+  log.info("update-downloaded", info);
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
