@@ -1,6 +1,6 @@
 {
   "name": "au-one",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "description": "This is auto updater app",
   "main": "main.js",
   "scripts": {
