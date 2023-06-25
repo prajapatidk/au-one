@@ -29,6 +29,7 @@
     "electron-builder": "^24.4.0"
   },
   "dependencies": {
+    "electron-log": "^4.4.8",
     "electron-updater": "^6.1.1"
   }
 }

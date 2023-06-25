@@ -2,12 +2,15 @@
 
 // Modules to control application life and create native browser window
 const { app, BrowserWindow } = require("electron");
+const log = require("electron-log");
 const { autoUpdater } = require("electron-updater");
-
-autoUpdater.autoDownload = false;
-autoUpdater.autoInstallOnAppQuit = true;
-
 const path = require("path");
+
+log.transports.file.resolvePath = () =>
+  path.join("E:/jsframework/electron/au-one/", "logs/main.log");
+
+// autoUpdater.autoDownload = false;
+// autoUpdater.autoInstallOnAppQuit = true;
 
 const createWindow = () => {
   // Create the browser window.
@@ -29,7 +32,7 @@ const createWindow = () => {
 app.whenReady().then(() => {
   createWindow();
 
-  autoUpdater.checkForUpdates();
+  autoUpdater.checkForUpdatesAndNotify();
 
   app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
@@ -39,28 +42,34 @@ app.whenReady().then(() => {
 });
 
 autoUpdater.on("checking-for-update", (info) => {
+  log.info("checking-for-update");
   console.log("checking-for-update");
 });
 
 autoUpdater.on("update-available", (info) => {
   console.log("update-available");
+  log.info("update-available");
 });
 
 autoUpdater.on("update-not-available", (info) => {
   console.log("update-available");
+  log.info("update-available");
 });
 
 autoUpdater.on("error", (info) => {
   console.log("error");
+  log.info("error");
 });
 
 autoUpdater.on("download-process", (progressTrack) => {
   console.log("\n\ndownload-process");
   console.log(progressTrack);
+  log.info(progressTrack);
 });
 
 autoUpdater.on("update-downloaded", (info) => {
   console.log("update-downloaded");
+  log.info("update-downloaded");
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
